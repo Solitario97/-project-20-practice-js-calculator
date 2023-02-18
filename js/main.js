@@ -6,9 +6,15 @@ const taskInput = document.querySelector('#taskInput');
 const tasksList = document.querySelector('#tasksList');
 const emptyList = document.querySelector('#emptyList');
 
-
+/* Добавление задачи */
 form.addEventListener('submit', addTask);
 
+/* Удаление задачи */
+tasksList.addEventListener('click', deleteTask);
+tasksList.addEventListener('click', doneTask);
+
+
+/* Функции */
     function addTask(event) {
         /* отмена перезагрузки  */
         event.preventDefault();
@@ -38,8 +44,30 @@ form.addEventListener('submit', addTask);
         taskInput.value = '';
         taskInput.focus();
 
-
-        if (emptyList.children.length > 1) {
+        /* Проверка. если в списке задач более 1-го элемента, скрываем блок */
+        if (tasksList.children.length > 1) {
             emptyList.classList.add('none');
         }   
+    }
+
+    function deleteTask (event) {
+        if (event.target.dataset.action === 'delete') {
+            const parentNote = event.target.closest('.list-group-item');
+            parentNote.remove();
+        }
+
+        /* Проверка. если в списке задач более 1-го элемента, скрываем блок */
+        if (tasksList.children.length === 1) {
+            emptyList.classList.remove('none');
+        } 
+
+    }
+
+    function doneTask (event) {
+        if (event.target.dataset.action ==='done') {
+            const parentNote = event.target.closest('.list-group-item');
+            const taskTitle = parentNote.querySelector('.task-title');
+            parentNote.classList.toggle('task-title--done');
+            console.log(parentNote);
+        }
     }
