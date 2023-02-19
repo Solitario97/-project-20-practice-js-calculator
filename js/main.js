@@ -1,10 +1,11 @@
 /* Находим элементы на странице */
 
-
 const form = document.querySelector('#form');
 const taskInput = document.querySelector('#taskInput');
 const tasksList = document.querySelector('#tasksList');
 const emptyList = document.querySelector('#emptyList');
+
+let tasks = [];
 
 /* Добавление задачи */
 form.addEventListener('submit', addTask);
@@ -22,11 +23,23 @@ tasksList.addEventListener('click', doneTask);
         /* Достаем текст задачи из поля инпут */
         const taskText = taskInput.value;
 
-        /* Формируем разметку для новой задачи */
+        /* Описываем задачу в виде объекта */
+        const newTask = {
+            id: Date.now(),
+            text: taskText,
+            done: false
+        };
 
+        /* Добавляем задачу в массив с задачами */
+        tasks.push(newTask);
+
+        /* Формируем CSS класс */
+        const cssClass = newTask.done ? 'task-title task-title--done' : 'task-title';
+
+        /* Формируем разметку для новой задачи */
         const taskHtml = `
-                    <li class="list-group-item d-flex justify-content-between task-item">
-                        <span class="task-title">${taskText}</span>
+                    <li id="${newTask.id}" class="list-group-item d-flex justify-content-between task-item">
+                        <span class="${cssClass}">${newTask.text}</span>
                         <div class="task-item__buttons">
                             <button type="button" data-action="done" class="btn-action">
                                 <img src="./img/tick.svg" alt="Done" width="18" height="18">
@@ -51,23 +64,29 @@ tasksList.addEventListener('click', doneTask);
     }
 
     function deleteTask (event) {
-        if (event.target.dataset.action === 'delete') {
-            const parentNote = event.target.closest('.list-group-item');
-            parentNote.remove();
-        }
+        /* Проверяем если клик был не по кнопке "удалить задачу" */
 
-        /* Проверка. если в списке задач более 1-го элемента, скрываем блок */
+        if (event.target.dataset.action !== 'delete') return;
+
+        const parentNote = event.target.closest('.list-group-item');
+
+        /* Определяем ID задачи */
+        const id = parent.id
+        /* Удаляем задачу из разметки */
+        parentNote.remove();
+
+            /* Проверка. если в списке задач более 1-го элемента, скрываем блок */
         if (tasksList.children.length === 1) {
             emptyList.classList.remove('none');
         } 
-
     }
 
     function doneTask (event) {
-        if (event.target.dataset.action ==='done') {
-            const parentNote = event.target.closest('.list-group-item');
-            const taskTitle = parentNote.querySelector('.task-title');
-            parentNote.classList.toggle('task-title--done');
-            console.log(parentNote);
-        }
+
+        if (event.target.dataset.action !=='done') return;
+
+        const parentNote = event.target.closest('.list-group-item');
+        const taskTitle = parentNote.querySelector('.task-title');
+        parentNote.classList.toggle('task-title--done');
+        console.log(parentNote);
     }
