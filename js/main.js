@@ -71,7 +71,16 @@ tasksList.addEventListener('click', doneTask);
         const parentNote = event.target.closest('.list-group-item');
 
         /* Определяем ID задачи */
-        const id = parent.id
+        const id = parentNote.id
+
+        /* Находим индекс задачи в массиве */
+        const index = tasks.findIndex(function (task) {
+            return task.id === +id;
+        });
+
+        /* Удаляем задачу из массива с задачами */
+        tasks.splice(index, 1);
+
         /* Удаляем задачу из разметки */
         parentNote.remove();
 
