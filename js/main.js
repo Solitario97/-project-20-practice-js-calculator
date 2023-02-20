@@ -68,21 +68,19 @@ tasksList.addEventListener('click', doneTask);
 
         if (event.target.dataset.action !== 'delete') return;
 
-        const parentNote = event.target.closest('.list-group-item');
+        const parentNode = event.target.closest('.list-group-item');
 
         /* Определяем ID задачи */
-        const id = parentNote.id
+        const id = parentNode.id
 
         /* Находим индекс задачи в массиве */
-        const index = tasks.findIndex(function (task) {
-            return task.id === +id;
-        });
+        const index = tasks.findIndex((task) => task.id === +id);
 
         /* Удаляем задачу из массива с задачами */
         tasks.splice(index, 1);
 
         /* Удаляем задачу из разметки */
-        parentNote.remove();
+        parentNode.remove();
 
             /* Проверка. если в списке задач более 1-го элемента, скрываем блок */
         if (tasksList.children.length === 1) {
@@ -94,8 +92,16 @@ tasksList.addEventListener('click', doneTask);
 
         if (event.target.dataset.action !=='done') return;
 
-        const parentNote = event.target.closest('.list-group-item');
-        const taskTitle = parentNote.querySelector('.task-title');
-        parentNote.classList.toggle('task-title--done');
-        console.log(parentNote);
+        const parentNode = event.target.closest('.list-group-item');
+
+        /* Определяем ID задачи */
+        const id = +parentNode.id;
+
+        const task = tasks.find((task) => task.id === id);
+
+        task.done = !task.done
+
+        const taskTitle = parentNode.querySelector('.task-title');
+        parentNode.classList.toggle('task-title--done');
+        console.log(parentNode);
     }
