@@ -6,6 +6,7 @@ const tasksList = document.querySelector('#tasksList');
 const emptyList = document.querySelector('#emptyList');
 
 let tasks = [];
+checkEmptyList ();
 
 /* Добавление задачи */
 form.addEventListener('submit', addTask);
@@ -57,10 +58,12 @@ tasksList.addEventListener('click', doneTask);
         taskInput.value = '';
         taskInput.focus();
 
+        checkEmptyList ();
+
         /* Проверка. если в списке задач более 1-го элемента, скрываем блок */
-        if (tasksList.children.length > 1) {
+      /*   if (tasksList.children.length > 1) {
             emptyList.classList.add('none');
-        }   
+        }    */
     }
 
     function deleteTask (event) {
@@ -82,10 +85,13 @@ tasksList.addEventListener('click', doneTask);
         /* Удаляем задачу из разметки */
         parentNode.remove();
 
-            /* Проверка. если в списке задач более 1-го элемента, скрываем блок */
-        if (tasksList.children.length === 1) {
+        checkEmptyList ();
+
+
+            /* Проверка. если в списке задач 1-ин элемент,показать блок */
+      /*   if (tasksList.children.length === 1) {
             emptyList.classList.remove('none');
-        } 
+        }  */
     }
 
     function doneTask (event) {
@@ -96,12 +102,25 @@ tasksList.addEventListener('click', doneTask);
 
         /* Определяем ID задачи */
         const id = +parentNode.id;
-
         const task = tasks.find((task) => task.id === id);
-
         task.done = !task.done
 
         const taskTitle = parentNode.querySelector('.task-title');
         parentNode.classList.toggle('task-title--done');
         console.log(parentNode);
+    }
+
+    function checkEmptyList () {
+        if (tasks.length === 0 ) {
+            const emtyListHtml = `<li id="emptyList" class="list-group-item empty-list">
+                                    <img src="./img/leaf.svg" alt="Empty" width="48" class="mt-3">
+                                    <div class="empty-list__title">Список дел пуст</div>
+                                  </li>`;
+        tasksList.insertAdjacentHTML('afterbegin', emtyListHtml);
+        }
+
+        if (tasks.length > 0 ) {
+            const emptyListEl = document.querySelector('#emptyList');
+            emptyListEl ? emptyListEl.remove() : null;
+        }
     }
