@@ -65,7 +65,7 @@ tasksList.addEventListener('click', doneTask);
         const parentNode = event.target.closest('.list-group-item');
 
         /* Определяем ID задачи */
-        const id = parentNode.id
+        const id = parentNode.id;
 
         /* Находим индекс задачи в массиве */
         const index = tasks.findIndex((task) => task.id === +id);
